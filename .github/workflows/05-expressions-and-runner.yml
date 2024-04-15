@@ -13,11 +13,14 @@ jobs:
          echo "Operating system: ${{ runner.os }}"
          echo "System architecture: ${{ runner.arch }}"
       - name: Operators
-        id: operatores
+        id: operators
         run: echo "${{ 2 > 1 }}"
-      # - name: Inspect the Github Context
-      #   id: ghContext
-      #   run: echo "${{ toJSON(github) }}"
+      - name: Inspect the Github Context
+        id: ghContext
+        # run: echo "${{ toJSON(github) }}"
+        run: echo $JSON # Workaround for https://github.com/actions/runner/issues/1656
+        env:
+          JSON: ${{ toJSON(github) }}
       - name: Event and actor
         id: eventActor
         run: |

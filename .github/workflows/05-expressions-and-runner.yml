@@ -7,11 +7,16 @@ jobs:
   expresiones:
     runs-on: ubuntu-latest
     steps:
+      - name: Verify OS and arch
+        id: osArch
+        run: |
+         echo "Operating system: ${{ runner.os }}"
+         echo "System architecture: ${{ runner.arch }}"
       - name: Operators
         id: operatores
         run: echo "${{ 2 > 1 }}"
       - name: Inspect the Github Context
-        id: githubContext
+        id: ghContext
         run: echo "${{ toJSON(github) }}"
       - name: Event and actor
         id: eventActor

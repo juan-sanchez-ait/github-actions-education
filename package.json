@@ -1,0 +1,28 @@
+{
+    "name": "@brainsdevops/dice",
+    "version": "1.0.0",
+    "description": "Roll dice!",
+    "main": "index.js",
+    "scripts": {
+        "test": "jest --coverage"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/BrainsDevOps/dice.git"
+    },
+    "keywords": [
+        "dice"
+    ],
+    "author": "Juan David Sánchez",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/BrainsDevOps/dice/issues"
+    },
+    "homepage": "https://github.com/BrainsDevOps/dice#readme",
+    "devDependencies": {
+        "jest": "^29.7.0"
+    },
+    "dependencies": {
+        "redis": "^4.6.12"
+    }
+}

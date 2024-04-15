@@ -12,7 +12,7 @@ jobs:
         version: [18, 20]
         exclude:
         - os: ubuntu-22.04
-          version: 20
+          version: 18
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4

@@ -1,0 +1,26 @@
+name: 09a - cache
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+jobs:
+  cache:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Node version
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - uses: actions/cache@v4
+        id: cache
+        with:
+          # path: ~/.npm
+          path: node_modules
+          key: ${{ runner.os }}-npm-${{ hashFiles('**package-lock.json') }}
+      - name: Install dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: npm ci
+      - name: Run tests
+        run: npm test
+

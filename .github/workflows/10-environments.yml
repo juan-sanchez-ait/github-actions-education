@@ -1,0 +1,14 @@
+name: 10 - environments
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+jobs:
+  entornos:
+    runs-on: ubuntu-latest
+    environment: prod
+    steps:
+      - name: Check variable
+        run: echo "${{vars.MY_VARIABLE}}"
+      - name: Check secret
+        run: echo "${{secrets.MY_SECRET}}"

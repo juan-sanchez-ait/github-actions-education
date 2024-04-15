@@ -1,0 +1,19 @@
+name: 04 - Installing packages
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check node version
+        run: node --version
+      - name: Install jsonlint
+        shell: bash # Choosing a specific shell
+        run: |
+          sudo apt-get update
+          sudo apt-get install jsonlint
+      - name: Lint json
+        run: jsonlint-php package.json

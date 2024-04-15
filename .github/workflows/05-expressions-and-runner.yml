@@ -4,7 +4,7 @@ on:
     branches: [ "main" ]
   workflow_dispatch:
 jobs:
-  expresiones:
+  expressions:
     runs-on: ubuntu-latest
     steps:
       - name: Verify OS and arch
@@ -15,9 +15,9 @@ jobs:
       - name: Operators
         id: operatores
         run: echo "${{ 2 > 1 }}"
-      - name: Inspect the Github Context
-        id: ghContext
-        run: echo "${{ toJSON(github) }}"
+      # - name: Inspect the Github Context
+      #   id: ghContext
+      #   run: echo "${{ toJSON(github) }}"
       - name: Event and actor
         id: eventActor
         run: |

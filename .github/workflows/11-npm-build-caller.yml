@@ -1,0 +1,16 @@
+name: 11 - [caller] Reusable workflow
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+jobs:
+  build:
+    uses: ./.github/workflows/11-npm-build-called.yml
+    with:
+      node-versions: "['16','18','20']"
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    steps: 
+      - name: Deployment
+        run: echo "Deploying to AWS..." 

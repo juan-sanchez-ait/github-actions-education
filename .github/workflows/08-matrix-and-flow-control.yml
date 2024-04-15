@@ -1,0 +1,44 @@
+name: 08 - Flow control
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+jobs:
+  build:
+    strategy:
+      fail-fast: false # true
+      matrix:
+        os: [ubuntu-22.04, ubuntu-20.04]
+        version: [18, 20]
+        exclude:
+        - os: ubuntu-22.04
+          version: 20
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup node environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.version }}
+      - if: matrix.os == 'ubuntu-22.04' && matrix.version == 20
+        run: exit 1
+        continue-on-error: true # false
+      - name: Everything OK
+        if: ${{ success() }}
+        run: echo "We see this if everything went well before with previous steps"
+      - name: Houston, we have a problem
+        if: ${{ failure() }}
+        run: echo "We see this if the previous step fails"
+      - name: Do this always
+        if: ${{ always() }}
+        run: echo "We see this always. Even if the workflow is cancelled"
+      - run: npm ci
+      - run: npm test
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    steps: 
+      - name: deploy
+        run: echo "Deploying on AWS..."
+

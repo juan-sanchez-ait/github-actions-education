@@ -25,7 +25,7 @@ jobs:
         if: ${{ inputs.number-of-dice == 'two' }}  
         id: secondDie
         run: echo "die2=$((1 + RANDOM % 6))" >> "$GITHUB_OUTPUT"
-  resumen:
+  summary:
     runs-on: ubuntu-latest
     needs: dice-roll
     steps:
@@ -33,7 +33,7 @@ jobs:
         run: |
          echo "# :game_die: The result is:" >> $GITHUB_STEP_SUMMARY
          echo die1: ${{needs.dice-roll.outputs.die1}} >> $GITHUB_STEP_SUMMARY
-      - name: Second die summary
+      - name: 2nd die summary
         if: ${{ inputs.number-of-dice == 'two' }}
         run: |
           echo die2: ${{needs.dice-roll.outputs.die2}} >> $GITHUB_STEP_SUMMARY

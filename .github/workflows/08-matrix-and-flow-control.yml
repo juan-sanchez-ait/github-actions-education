@@ -22,7 +22,7 @@ jobs:
           node-version: ${{ matrix.version }}
       - if: matrix.os == 'ubuntu-22.04' && matrix.version == 20
         run: exit 1
-        continue-on-error: true # false
+        #continue-on-error: true
       - name: Everything OK
         if: ${{ success() }}
         run: echo "We see this if everything went well before with previous steps"

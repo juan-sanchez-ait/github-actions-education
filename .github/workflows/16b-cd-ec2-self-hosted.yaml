@@ -25,7 +25,7 @@ jobs:
           aws-region: eu-west-1
       - name: Start EC2 runner
         id: start-ec2-runner
-        uses: machulav/ec2-github-runner@v3
+        uses: machulav/ec2-github-runner@v2.3.6
         with:
           mode: start
           pre-runner-script: |
@@ -74,7 +74,7 @@ jobs:
           role-session-name: GHactions
           aws-region: eu-west-1
       - name: Stop EC2 runner
-        uses: machulav/ec2-github-runner@v3
+        uses: machulav/ec2-github-runner@v2.3.6
         with:
           mode: stop
           github-token: ${{ secrets.CODES_ACTIONS_PAT }}

@@ -6,12 +6,13 @@ on:
 jobs:
   prueba-permisos:
     name: Test permissions
+    # Preconditions: Make the repo private
     # Test 1: Without the permission block. By default: https://docs.github.com/en/actions/security-guides/automatic-token-authentication#permissions-for-the-github_token
     # contents: read, issues: none
     # Test 2: Elevate permissions
-    # permissions:
-    #   contents: read
-    #   issues: read
+    permissions:
+      contents: read
+      issues: read
     # Test 3: Remove all permissions
     # permissions: {}
     runs-on: ubuntu-latest

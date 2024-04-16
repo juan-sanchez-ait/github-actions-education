@@ -16,3 +16,4 @@ This repository provides some simple examples of the usage of the basic building
 13) Javascript actions
 14) Docker actions
 15) Security
+16) Connect with AWS

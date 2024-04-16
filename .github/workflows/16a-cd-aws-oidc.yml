@@ -1,0 +1,19 @@
+name: 16a - AWS OIDC # https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-amazon-web-services
+on:
+  workflow_dispatch:
+jobs:
+  hello-aws:
+    permissions:
+      id-token: write # This is required for requesting the JWT
+      contents: read # This is required for actions/checkout
+    runs-on: ubuntu-latest
+    steps:
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v3
+      with:
+        role-to-assume: arn:aws:iam::730335550493:role/juands-github-oidc
+        role-session-name: GHactions
+        aws-region: eu-west-1
+    - name: List buckets
+      run: aws s3 ls
+      

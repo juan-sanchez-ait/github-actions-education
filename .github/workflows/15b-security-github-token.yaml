@@ -14,7 +14,7 @@ jobs:
     #   contents: read
     #   issues: read
     # Test 3: Remove all permissions
-    permissions: {}
+    # permissions: {}
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4

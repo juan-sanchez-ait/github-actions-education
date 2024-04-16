@@ -5,7 +5,7 @@ on:
   workflow_dispatch:
 jobs:
   run-in-container:
-    name: Uso contenedores
+    name: Container usage
     runs-on: ubuntu-latest
     container: node:16-bullseye
     steps:
@@ -13,7 +13,7 @@ jobs:
       - name: run node
         run: node script.js
   container-2-container:
-    name: Comunicación contenedor a contenedor
+    name: Container to container communication
     runs-on: ubuntu-latest
     container: node:16-bullseye
     services:

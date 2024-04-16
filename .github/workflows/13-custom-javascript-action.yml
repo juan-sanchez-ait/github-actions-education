@@ -1,0 +1,16 @@
+name: 13 - Custom javascript action
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+jobs:
+  js-action:
+    runs-on: ubuntu-latest
+    name: Usage of javascript action
+    steps:
+      - id: javascript
+        uses: juan-sanchez-ait/gha-javascript-hello@v1
+        with:
+          name: 'Juan'
+      - name: The greeting
+        run: echo "${{steps.javascript.outputs.greeting}}"

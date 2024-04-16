@@ -1,0 +1,16 @@
+name: 14a - Custom docker action
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+jobs:
+  docker-python-action:
+    runs-on: ubuntu-latest
+    name: Using docker python action
+    steps:
+      - id: docker
+        uses: juan-sanchez-ait/gha-dockerpy-hello@v1
+        with:
+          name: 'Juan'
+      - name: The greeting
+        run: echo "${{steps.docker.outputs.greeting}}"

@@ -4,38 +4,18 @@ on:
     branches: [ "main" ]
   workflow_dispatch:
 jobs:
-  # run-in-container:
-  #   name: Uso contenedores
-  #   runs-on: ubuntu-latest
-  #   container: node:16-bullseye
-  #   steps:
-  #     - uses: actions/checkout@v3
-  #     - name: run node
-  #       run: node script.js
-  # container-2-container:
-  #   name: Comunicación contenedor a contenedor
-  #   runs-on: ubuntu-latest
-  #   container: node:16-bullseye
-  #   services:
-  #     redis:
-  #       image: redis
-  #       options: >-
-  #         --health-cmd "redis-cli ping"
-  #         --health-interval 10s
-  #         --health-timeout 5s
-  #         --health-retries 5
-  #   steps:
-  #     - uses: actions/checkout@v3
-  #     - name: Install dependencies
-  #       run: npm i
-  #     - name: connect to redis
-  #       env:
-  #         REDIS_HOST: redis
-  #         REDIS_PORT: 6379
-  #       run: node redis.js
-  vm-2-container:
-    name: VM to container communication
+  run-in-container:
+    name: Uso contenedores
     runs-on: ubuntu-latest
+    container: node:16-bullseye
+    steps:
+      - uses: actions/checkout@v3
+      - name: run node
+        run: node script.js
+  container-2-container:
+    name: Comunicación contenedor a contenedor
+    runs-on: ubuntu-latest
+    container: node:16-bullseye
     services:
       redis:
         image: redis
@@ -44,16 +24,36 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-        ports: # We need to explicitly map the ports
-          - 6379:6379
     steps:
       - uses: actions/checkout@v3
       - name: Install dependencies
         run: npm i
       - name: connect to redis
         env:
-          REDIS_HOST: localhost # We use localhost instead of the container name
+          REDIS_HOST: redis
           REDIS_PORT: 6379
         run: node redis.js
+  # vm-2-container:
+  #   name: VM to container communication
+  #   runs-on: ubuntu-latest
+  #   services:
+  #     redis:
+  #       image: redis
+  #       options: >-
+  #         --health-cmd "redis-cli ping"
+  #         --health-interval 10s
+  #         --health-timeout 5s
+  #         --health-retries 5
+  #       ports: # We need to explicitly map the ports
+  #         - 6379:6379
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - name: Install dependencies
+  #       run: npm i
+  #     - name: connect to redis
+  #       env:
+  #         REDIS_HOST: localhost # We use localhost instead of the container name
+  #         REDIS_PORT: 6379
+  #       run: node redis.js
 
         

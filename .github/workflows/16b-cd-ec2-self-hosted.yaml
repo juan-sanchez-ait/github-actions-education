@@ -36,7 +36,7 @@ jobs:
           ec2-image-id: ami-0f007bf1d5c770c6e # <AWS_AMI_ID>
           ec2-instance-type: t3.micro
           subnet-id: subnet-00034a2eee1740dd4 # <AWS_SUBNET_ID>
-          security-group-id: sg-07263f43c69149f61 #<AWS_SECURITY_GROUP_ID>
+          security-group-id: sg-08378382619c08665 #<AWS_SECURITY_GROUP_ID>
           # aws-resource-tags: > # optional, requires additional permissions
           #   [
           #     {"Key": "Name", "Value": "ec2-github-runner"},

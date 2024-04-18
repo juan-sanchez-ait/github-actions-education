@@ -1,4 +1,4 @@
-name: 16c - EKS kerpenter worker
+name: 16c - EKS karpenter worker
 on:
   workflow_dispatch:
 jobs:

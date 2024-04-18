@@ -6,7 +6,7 @@ on:
         required: false
         type: string
         default: "['18', '20']"
-        description: "Las versiones de node sobre las que se va a probar"
+        description: "The node versions on which we are running the tests"
 jobs:
   build:
     strategy:

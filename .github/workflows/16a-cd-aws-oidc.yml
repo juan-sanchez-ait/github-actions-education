@@ -3,6 +3,7 @@ on:
   workflow_dispatch:
 jobs:
   hello-aws:
+    environment: prod
     permissions:
       id-token: write # This is required for requesting the JWT
       contents: read # This is required for actions/checkout
@@ -16,4 +17,4 @@ jobs:
         aws-region: eu-west-1
     - name: List buckets
       run: aws s3 ls
-      
+    

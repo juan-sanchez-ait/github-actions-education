@@ -7,8 +7,6 @@ on:
   push:
     branches:
       - 'main'
-    paths-ignore:
-      - '.github/workflows/*.yml'
 jobs:
   start-runner:
     name: Start self-hosted EC2 runner
@@ -23,11 +21,14 @@ jobs:
           role-to-assume: arn:aws:iam::730335550493:role/juands-github-oidc
           role-session-name: GHactions
           aws-region: eu-west-1
-      - name: Get subnetId
+      - name: Get AWS params
         run: |
           echo SUBNET_ID=$(aws ec2 describe-subnets --filters "Name=tag:Tier,Values=Private" --query "Subnets[0].SubnetId" --output text) >> "$GITHUB_ENV"
-      - name: Check subnet value
-        run: echo "The subnetId is ${{ env.SUBNET_ID }}"
+          echo SECURITY_GROUP_ID=$(aws ec2 describe-security-groups --filters Name=ip-permission.to-port,Values=443 --query "SecurityGroups[*].[GroupId]" --output text) >> "$GITHUB_ENV"
+      - name: Debug AWS params
+        run: |
+          echo "The subnetId is ${{ env.SUBNET_ID }}"
+          echo "The Security group id is ${{ env.SECURITY_GROUP_ID }}"
       # - name: Start EC2 runner
       #   id: start-ec2-runner
       #   uses: machulav/ec2-github-runner@v2.3.6
@@ -40,8 +41,8 @@ jobs:
       #     github-token: ${{ secrets.CODES_ACTIONS_PAT}}
       #     ec2-image-id: ami-0f007bf1d5c770c6e # <AWS_AMI_ID>
       #     ec2-instance-type: t3.micro
-      #     subnet-id: subnet-00034a2eee1740dd4 # <AWS_SUBNET_ID>
-      #     security-group-id: sg-08378382619c08665 #<AWS_SECURITY_GROUP_ID>
+      #     subnet-id: ${{ env.SUBNET_ID }} # <AWS_SUBNET_ID>
+      #     security-group-id: ${{ env.SECURITY_GROUP_ID }} #<AWS_SECURITY_GROUP_ID>
       #     aws-resource-tags: > # optional, requires additional permissions
       #       [
       #         {"Key": "Name", "Value": "ec2-github-runner"},

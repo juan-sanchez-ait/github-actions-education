@@ -4,7 +4,7 @@ on:
     types:
       - opened
 jobs:
-  What would happen if someone opened an issue with this title: a"; printenv"
+  # What would happen if someone opened an issue with this title: a"; printenv"
   injection:
     runs-on: ubuntu-latest
     steps:

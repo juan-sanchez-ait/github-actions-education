@@ -23,60 +23,65 @@ jobs:
           role-to-assume: arn:aws:iam::730335550493:role/juands-github-oidc
           role-session-name: GHactions
           aws-region: eu-west-1
-      - name: Start EC2 runner
-        id: start-ec2-runner
-        uses: machulav/ec2-github-runner@v2.3.6
-        with:
-          mode: start
-          pre-runner-script: |
-                 sudo yum update -y && \ 
-                 sudo yum install docker git libicu -y
-                 sudo systemctl enable docker
-          github-token: ${{ secrets.CODES_ACTIONS_PAT}}
-          ec2-image-id: ami-0f007bf1d5c770c6e # <AWS_AMI_ID>
-          ec2-instance-type: t3.micro
-          subnet-id: subnet-00034a2eee1740dd4 # <AWS_SUBNET_ID>
-          security-group-id: sg-08378382619c08665 #<AWS_SECURITY_GROUP_ID>
-          aws-resource-tags: > # optional, requires additional permissions
-            [
-              {"Key": "Name", "Value": "ec2-github-runner"},
-              {"Key": "GitHubRepository", "Value": "${{ github.repository }}"}
-            ]
-  deploy:
-    name: Do the job on the runner
-    needs: start-runner # required to start the main job when the runner is ready
-    runs-on: ${{ needs.start-runner.outputs.label }} # run the job on the newly created runner
-    steps:
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v3
-        with:
-          role-to-assume: arn:aws:iam::730335550493:role/juands-github-oidc
-          role-session-name: GHactions
-          aws-region: eu-west-1
-      - name: Install Packages
+      - name: Get subnetId
         run: |
-          sudo yum install pip -y
-          sudo pip install boto3
-      - name: List bucket
-        run: aws s3 ls
-  stop-runner:
-    name: Stop self-hosted EC2 runner
-    needs:
-      - start-runner # required to get output from the start-runner job
-      - deploy # required to wait when the main job is done
-    runs-on: ubuntu-latest
-    if: ${{ always() }} # required to stop the runner even if the error happened in the previous jobs
-    steps:
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v3
-        with:
-          role-to-assume: arn:aws:iam::730335550493:role/juands-github-oidc
-          role-session-name: GHactions
-          aws-region: eu-west-1
-      - name: Stop EC2 runner
-        uses: machulav/ec2-github-runner@v2.3.6
-        with:
-          mode: stop
-          github-token: ${{ secrets.CODES_ACTIONS_PAT }}
-          label: ${{ needs.start-runner.outputs.label }}
-          ec2-instance-id: ${{ needs.start-runner.outputs.ec2-instance-id }}
+          echo SUBNET_ID=$(aws ec2 describe-subnets --filters "Name=tag:Tier,Values=Private" --query "Subnets[0].SubnetId" --output text) >> "$GITHUB_ENV"
+      - name: Check subnet value
+        run: echo "The subnetId is ${{ env.SUBNET_ID }}"
+      # - name: Start EC2 runner
+      #   id: start-ec2-runner
+      #   uses: machulav/ec2-github-runner@v2.3.6
+      #   with:
+      #     mode: start
+      #     pre-runner-script: |
+      #            sudo yum update -y && \ 
+      #            sudo yum install docker git libicu -y
+      #            sudo systemctl enable docker
+      #     github-token: ${{ secrets.CODES_ACTIONS_PAT}}
+      #     ec2-image-id: ami-0f007bf1d5c770c6e # <AWS_AMI_ID>
+      #     ec2-instance-type: t3.micro
+      #     subnet-id: subnet-00034a2eee1740dd4 # <AWS_SUBNET_ID>
+      #     security-group-id: sg-08378382619c08665 #<AWS_SECURITY_GROUP_ID>
+      #     aws-resource-tags: > # optional, requires additional permissions
+      #       [
+      #         {"Key": "Name", "Value": "ec2-github-runner"},
+      #         {"Key": "GitHubRepository", "Value": "${{ github.repository }}"}
+      #       ]
+  # deploy:
+  #   name: Do the job on the runner
+  #   needs: start-runner # required to start the main job when the runner is ready
+  #   runs-on: ${{ needs.start-runner.outputs.label }} # run the job on the newly created runner
+  #   steps:
+  #     - name: Configure AWS credentials
+  #       uses: aws-actions/configure-aws-credentials@v3
+  #       with:
+  #         role-to-assume: arn:aws:iam::730335550493:role/juands-github-oidc
+  #         role-session-name: GHactions
+  #         aws-region: eu-west-1
+  #     - name: Install Packages
+  #       run: |
+  #         sudo yum install pip -y
+  #         sudo pip install boto3
+  #     - name: List bucket
+  #       run: aws s3 ls
+  # stop-runner:
+  #   name: Stop self-hosted EC2 runner
+  #   needs:
+  #     - start-runner # required to get output from the start-runner job
+  #     - deploy # required to wait when the main job is done
+  #   runs-on: ubuntu-latest
+  #   if: ${{ always() }} # required to stop the runner even if the error happened in the previous jobs
+  #   steps:
+  #     - name: Configure AWS credentials
+  #       uses: aws-actions/configure-aws-credentials@v3
+  #       with:
+  #         role-to-assume: arn:aws:iam::730335550493:role/juands-github-oidc
+  #         role-session-name: GHactions
+  #         aws-region: eu-west-1
+  #     - name: Stop EC2 runner
+  #       uses: machulav/ec2-github-runner@v2.3.6
+  #       with:
+  #         mode: stop
+  #         github-token: ${{ secrets.CODES_ACTIONS_PAT }}
+  #         label: ${{ needs.start-runner.outputs.label }}
+  #         ec2-instance-id: ${{ needs.start-runner.outputs.ec2-instance-id }}

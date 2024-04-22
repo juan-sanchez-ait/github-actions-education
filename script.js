@@ -1,2 +1,2 @@
-const dice = require('./index')
+const dice = require('./dice')
 console.group(dice.roll());

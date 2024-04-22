@@ -1,4 +1,4 @@
-const dice = require("./index");
+const dice = require("./dice");
 test("Returns a random number between 1 and 6", () => {
     const rollResult = dice.roll();
     console.log(`result was ${rollResult}`);

@@ -39,8 +39,11 @@ jobs:
           mode: start
           pre-runner-script: |
                  sudo yum update -y && \ 
-                 sudo yum install docker git libicu nodejs20 -y
+                 sudo yum install docker git libicu -y
                  sudo systemctl enable docker
+                 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+                 source ~/.bash_profile
+                 nvm install --lts
           github-token: ${{ secrets.CODES_ACTIONS_PAT}}
           ec2-image-id: ${{ env.AMI_ID }} # <AWS_AMI_ID>
           ec2-instance-type: t4g.micro
@@ -69,6 +72,9 @@ jobs:
       #     sudo pip install boto3
       # - name: List bucket
       #   run: aws s3 ls
+      - name: Check NVM version
+        run: nvm --version
+
       - name: Check node version
         run: node --version
 

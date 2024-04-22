@@ -5,6 +5,9 @@ on:
     types:
       - opened
       - synchronize
+env:
+  ACTIONS_RUNNER_DEBUG: true
+  ACTIONS_STEP_DEBUG: true
 permissions: write-all
 jobs:
   review:

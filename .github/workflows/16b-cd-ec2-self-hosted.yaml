@@ -39,7 +39,7 @@ jobs:
           mode: start
           pre-runner-script: |
                  sudo yum update -y && \ 
-                 sudo yum install docker git libicu -y
+                 sudo yum install docker git libicu nodejs20 -y
                  sudo systemctl enable docker
           github-token: ${{ secrets.CODES_ACTIONS_PAT}}
           ec2-image-id: ${{ env.AMI_ID }} # <AWS_AMI_ID>
@@ -69,6 +69,8 @@ jobs:
       #     sudo pip install boto3
       # - name: List bucket
       #   run: aws s3 ls
+      - name: Check node version
+        run: node --version
 
       - name: Check out the repo
         uses: actions/checkout@v4

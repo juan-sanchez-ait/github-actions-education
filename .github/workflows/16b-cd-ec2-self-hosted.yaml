@@ -79,6 +79,10 @@ jobs:
         run: node --version
       - name: Check docker version
         run: docker --version
+      - name: Check the user
+        run: whoami
+      - name: Check docker daemon
+        run: ls -l /var/run/docker.sock
       - name: Check out the repo
         uses: actions/checkout@v4
 
@@ -96,9 +100,6 @@ jobs:
           tags: |
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
-
-      - name: Set up containerd
-        uses: crazy-max/ghaction-setup-containerd@v2
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v5

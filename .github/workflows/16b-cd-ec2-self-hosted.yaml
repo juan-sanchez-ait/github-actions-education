@@ -26,7 +26,7 @@ jobs:
         run: |
           echo SUBNET_ID=$(aws ec2 describe-subnets --filters "Name=tag:Tier,Values=Private" --query "Subnets[0].SubnetId" --output text) >> "$GITHUB_ENV"
           echo SECURITY_GROUP_ID=$(aws ec2 describe-security-groups --filters Name=ip-permission.to-port,Values=443 --query "SecurityGroups[*].[GroupId]" --output text) >> "$GITHUB_ENV"
-          echo AMI_ID=$(aws ec2 describe-images --owners amazon --filters "Name=name,Values=al2023-ami-2023*" "Name=architecture,Values=arm64" --query "reverse(sort_by(Images, &CreationDate))[].ImageId" --region eu-west-1 --output text) >> "$GITHUB_ENV"
+          echo AMI_ID=$(aws ec2 describe-images --owners amazon --filters "Name=name,Values=al2023-ami-2023*" "Name=architecture,Values=arm64" --query "reverse(sort_by(Images, &CreationDate))[0].ImageId" --region eu-west-1 --output text) >> "$GITHUB_ENV"
       - name: Debug AWS params
         run: |
           echo "The subnetId is ${{ env.SUBNET_ID }}"

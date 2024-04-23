@@ -23,11 +23,12 @@ jobs:
           aws-region: eu-west-1
         # fetch AWS parameters dynamically
         # echo AMI_ID=$(aws ec2 describe-images --owners amazon --filters "Name=name,Values=al2023-ami-2023*" "Name=architecture,Values=arm64" --query "reverse(sort_by(Images, &CreationDate))[0].ImageId" --region eu-west-1 --output text) >> "$GITHUB_ENV"
+        # echo AMI_ID=$(aws ec2 describe-images --owners amazon --filters "Name=name,Values=amzn2-ami-hvm-*" "Name=architecture,Values=arm64" --query "reverse(sort_by(Images, &CreationDate))[0].ImageId" --region eu-west-1 --output text) >> "$GITHUB_ENV"
       - name: Get AWS params
         run: |
           echo SUBNET_ID=$(aws ec2 describe-subnets --filters "Name=tag:Tier,Values=Private" --query "Subnets[0].SubnetId" --output text) >> "$GITHUB_ENV"
           echo SECURITY_GROUP_ID=$(aws ec2 describe-security-groups --filters Name=ip-permission.to-port,Values=443 --query "SecurityGroups[*].[GroupId]" --output text) >> "$GITHUB_ENV"
-          echo AMI_ID=$(aws ec2 describe-images --owners amazon --filters "Name=name,Values=amzn2-ami-hvm-*" "Name=architecture,Values=arm64" --query "reverse(sort_by(Images, &CreationDate))[0].ImageId" --region eu-west-1 --output text) >> "$GITHUB_ENV"
+          echo AMI_ID=$(aws ec2 describe-images --owners amazon --filters "Name=name,Values=al2023-ami-2023*" "Name=architecture,Values=arm64" --query "reverse(sort_by(Images, &CreationDate))[0].ImageId" --region eu-west-1 --output text) >> "$GITHUB_ENV"
       - name: Debug AWS params
         run: |
           echo "The subnetId is ${{ env.SUBNET_ID }}"
@@ -39,11 +40,15 @@ jobs:
         with:
           mode: start
           pre-runner-script: |
-                 sudo yum update -y && \ 
-                 sudo yum install docker git libicu curl -y
-                 sudo systemctl enable docker
-                 curl -fsSL https://rpm.nodesource.com/setup_20.x | sudo bash -
-                 sudo yum install -y nodejs
+            curl -fsSL https://rpm.nodesource.com/setup_20.x | sudo bash - && \
+            sudo yum update -y && \
+            sudo yum install -y nodejs && \
+            sudo yum install docker -y && \
+            sudo yum install git -y && \
+            sudo yum install libicu -y && \
+            sudo systemctl enable docker
+                 
+                 
           github-token: ${{ secrets.CODES_ACTIONS_PAT}}
           ec2-image-id: ${{ env.AMI_ID }} # <AWS_AMI_ID> - ami-0a92fec178aa0f088 (preinstalled SW) - ami-0f007bf1d5c770c6e (ARM) - ami-06055ab1b3dc70f03 (amzn2-ami-hvm-2.0.20220426.0-arm64-gp2)
           ec2-instance-type: t4g.micro # t3.micro / t4g.micro

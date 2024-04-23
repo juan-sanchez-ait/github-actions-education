@@ -37,14 +37,14 @@ jobs:
         uses: machulav/ec2-github-runner@v2.3.6
         with:
           mode: start
-          pre-runner-script: |
-                 sudo yum update -y && \ 
-                 sudo yum install docker git libicu curl -y
-                 sudo systemctl enable docker
-                 curl -fsSL https://rpm.nodesource.com/setup_20.x | sudo bash -
-                 sudo yum install -y nodejs
+          # pre-runner-script: |
+          #        sudo yum update -y && \ 
+          #        sudo yum install docker git libicu curl -y
+          #        sudo systemctl enable docker
+          #        curl -fsSL https://rpm.nodesource.com/setup_20.x | sudo bash -
+          #        sudo yum install -y nodejs
           github-token: ${{ secrets.CODES_ACTIONS_PAT}}
-          ec2-image-id: ${{ env.AMI_ID }} # <AWS_AMI_ID> - ami-0a92fec178aa0f088
+          ec2-image-id: ami-0a92fec178aa0f088 # <AWS_AMI_ID> - ami-0a92fec178aa0f088 - ami-0f007bf1d5c770c6e
           ec2-instance-type: t4g.micro
           subnet-id: ${{ env.SUBNET_ID }} # <AWS_SUBNET_ID>
           security-group-id: ${{ env.SECURITY_GROUP_ID }} #<AWS_SECURITY_GROUP_ID>

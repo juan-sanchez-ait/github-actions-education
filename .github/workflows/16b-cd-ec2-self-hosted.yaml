@@ -42,8 +42,8 @@ jobs:
                  sudo yum update -y && \ 
                  sudo yum install docker git libicu curl -y
                  sudo systemctl enable docker
-          #        curl -fsSL https://rpm.nodesource.com/setup_20.x | sudo bash -
-          #        sudo yum install -y nodejs
+                 curl -fsSL https://rpm.nodesource.com/setup_20.x | sudo bash -
+                 sudo yum install -y nodejs
           github-token: ${{ secrets.CODES_ACTIONS_PAT}}
           ec2-image-id: ${{ env.AMI_ID }} # <AWS_AMI_ID> - ami-0a92fec178aa0f088 (preinstalled SW) - ami-0f007bf1d5c770c6e (ARM) - ami-06055ab1b3dc70f03 (amzn2-ami-hvm-2.0.20220426.0-arm64-gp2)
           ec2-instance-type: t4g.micro # t3.micro / t4g.micro

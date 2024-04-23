@@ -1,12 +1,16 @@
-name: 16b - Dynamic EC2 runner provisioning
+name: 16b - Dynamic EC2 runner provisioning & docker push
 permissions:
   id-token: write # This is required for requesting the JWT
   contents: read # This is required for actions/checkout
 on:
-  workflow_dispatch:
   push:
-    branches:
-      - 'main'
+    tags:
+      - "v*.*.*"
+env:
+  ROLE_TO_ASSUME: arn:aws:iam::730335550493:role/juands-github-oidc
+  ROLE_SESSION_NAME: GHactions
+  AWS_REGION: eu-west-1
+  EC2_INSTANCE_TYPE: t4g.micro
 jobs:
   start-runner:
     name: Start self-hosted EC2 runner
@@ -18,22 +22,14 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v3
         with:
-          role-to-assume: arn:aws:iam::730335550493:role/juands-github-oidc
-          role-session-name: GHactions
-          aws-region: eu-west-1
-        # fetch AWS parameters dynamically
-        # echo AMI_ID=$(aws ec2 describe-images --owners amazon --filters "Name=name,Values=al2023-ami-2023*" "Name=architecture,Values=arm64" --query "reverse(sort_by(Images, &CreationDate))[0].ImageId" --region eu-west-1 --output text) >> "$GITHUB_ENV"
-        # echo AMI_ID=$(aws ec2 describe-images --owners amazon --filters "Name=name,Values=amzn2-ami-hvm-*" "Name=architecture,Values=arm64" --query "reverse(sort_by(Images, &CreationDate))[0].ImageId" --region eu-west-1 --output text) >> "$GITHUB_ENV"
+          role-to-assume: ${{ env.ROLE_TO_ASSUME }}
+          role-session-name: ${{ env.ROLE_SESSION_NAME }}
+          aws-region: ${{ env.AWS_REGION }}
       - name: Get AWS params
         run: |
           echo SUBNET_ID=$(aws ec2 describe-subnets --filters "Name=tag:Tier,Values=Private" --query "Subnets[0].SubnetId" --output text) >> "$GITHUB_ENV"
           echo SECURITY_GROUP_ID=$(aws ec2 describe-security-groups --filters Name=ip-permission.to-port,Values=443 --query "SecurityGroups[*].[GroupId]" --output text) >> "$GITHUB_ENV"
-          echo AMI_ID=$(aws ec2 describe-images --owners amazon --filters "Name=name,Values=al2023-ami-2023*" "Name=architecture,Values=arm64" --query "reverse(sort_by(Images, &CreationDate))[0].ImageId" --region eu-west-1 --output text) >> "$GITHUB_ENV"
-      - name: Debug AWS params
-        run: |
-          echo "The subnetId is ${{ env.SUBNET_ID }}"
-          echo "The Security group id is ${{ env.SECURITY_GROUP_ID }}"
-          echo "The AMI id is ${{ env.AMI_ID }}"
+          echo AMI_ID=$(aws ec2 describe-images --owners amazon --filters "Name=name,Values=al2023-ami-2023*" "Name=architecture,Values=arm64" --query "reverse(sort_by(Images, &CreationDate))[0].ImageId" --region ${{ env.AWS_REGION }} --output text) >> "$GITHUB_ENV"
       - name: Start EC2 runner
         id: start-ec2-runner
         uses: machulav/ec2-github-runner@v2.3.6
@@ -50,7 +46,7 @@ jobs:
             sudo systemctl start docker
           github-token: ${{ secrets.CODES_ACTIONS_PAT}}
           ec2-image-id: ${{ env.AMI_ID }} # <AWS_AMI_ID> - ami-0a92fec178aa0f088 (preinstalled SW) - ami-0f007bf1d5c770c6e (ARM) - ami-06055ab1b3dc70f03 (amzn2-ami-hvm-2.0.20220426.0-arm64-gp2)
-          ec2-instance-type: t4g.micro # t3.micro / t4g.micro
+          ec2-instance-type: ${{ env.EC2_INSTANCE_TYPE }} # t3.micro / t4g.micro
           subnet-id: ${{ env.SUBNET_ID }} # <AWS_SUBNET_ID>
           security-group-id: ${{ env.SECURITY_GROUP_ID }} #<AWS_SECURITY_GROUP_ID>
           aws-resource-tags: > # optional, requires additional permissions
@@ -67,25 +63,9 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v3
         with:
-          role-to-assume: arn:aws:iam::730335550493:role/juands-github-oidc
-          role-session-name: GHactions
-          aws-region: eu-west-1
-      # - name: Install Packages
-      #   run: |
-      #     sudo yum install pip -y
-      #     sudo pip install boto3
-      # - name: List bucket
-      #   run: aws s3 ls
-      - name: Check node version
-        run: node --version
-      - name: Check docker version
-        run: docker --version
-      - name: Check the user
-        run: whoami
-      - name: Check the system
-        run: sudo systemctl status docker
-      - name: Check docker daemon
-        run: ls -l /var/run/docker.sock
+          role-to-assume: ${{ env.ROLE_TO_ASSUME }}
+          role-session-name: ${{ env.ROLE_SESSION_NAME }}
+          aws-region: ${{ env.AWS_REGION }}
       - name: Check out the repo
         uses: actions/checkout@v4
 
@@ -124,9 +104,9 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v3
         with:
-          role-to-assume: arn:aws:iam::730335550493:role/juands-github-oidc
-          role-session-name: GHactions
-          aws-region: eu-west-1
+          role-to-assume: ${{ env.ROLE_TO_ASSUME }}
+          role-session-name: ${{ env.ROLE_SESSION_NAME }}
+          aws-region: ${{ env.AWS_REGION }}
       - name: Stop EC2 runner
         uses: machulav/ec2-github-runner@v2.3.6
         with:

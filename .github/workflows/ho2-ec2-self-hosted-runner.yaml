@@ -1,4 +1,4 @@
-name: 16b - Dynamic EC2 runner provisioning & docker push
+name: Dynamic EC2 runner provisioning & docker push
 permissions:
   id-token: write # This is required for requesting the JWT
   contents: read # This is required for actions/checkout

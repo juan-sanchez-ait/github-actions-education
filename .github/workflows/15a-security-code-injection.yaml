@@ -17,4 +17,4 @@ jobs:
       ISSUE_TITLE: ${{ github.event.issue.title }} #
     steps:
       - run: |
-          echo "${ISSUE_TITLE}"
+          echo "$ISSUE_TITLE"

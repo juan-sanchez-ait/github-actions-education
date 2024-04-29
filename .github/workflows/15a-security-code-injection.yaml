@@ -4,17 +4,17 @@ on:
     types:
       - opened
 jobs:
-  # What would happen if someone opened an issue with this title: a"; printenv"
-  # injection:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - run: |
-  #         title="${{ github.event.issue.title }}"
-  #         echo ${title}
+  What would happen if someone opened an issue with this title: a"; printenv"
   injection:
     runs-on: ubuntu-latest
-    env:
-      ISSUE_TITLE: ${{ github.event.issue.title }} #
     steps:
       - run: |
-          echo "${ISSUE_TITLE}"
+          title="${{ github.event.issue.title }}"
+          echo ${title}
+  # injection:
+  #   runs-on: ubuntu-latest
+  #   env:
+  #     ISSUE_TITLE: ${{ github.event.issue.title }} #
+  #   steps:
+  #     - run: |
+  #         echo "${ISSUE_TITLE}"

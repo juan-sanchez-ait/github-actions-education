@@ -7,7 +7,7 @@ on:
     tags:
       - "v*.*.*"
 env:
-  ROLE_TO_ASSUME: arn:aws:iam::730335550493:role/juands-github-oidc
+  ROLE_TO_ASSUME: ${{ secrets.AWS_GITHUB_OIDC_ROLE }}
   ROLE_SESSION_NAME: GHactions
   AWS_REGION: eu-west-1
   EC2_INSTANCE_TYPE: t4g.micro

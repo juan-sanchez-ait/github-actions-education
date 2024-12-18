@@ -9,6 +9,6 @@ jobs:
     name: Npm build test
     steps:
       - id: compuesta
-        uses: juan-sanchez-ait/gha-npm-composite-action@v1
+        uses: juan-sanchez-ait/gha-npm-composite-action@v2
         with:
           node-version: 20

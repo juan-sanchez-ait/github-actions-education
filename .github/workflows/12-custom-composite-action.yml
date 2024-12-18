@@ -8,6 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Npm build test 2
     steps:
+      - uses: action/checkout@v4
       - id: compuesta
         uses: juan-sanchez-ait/gha-npm-composite-action@v2
         with:

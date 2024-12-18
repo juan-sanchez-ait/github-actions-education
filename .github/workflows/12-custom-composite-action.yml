@@ -6,7 +6,7 @@ on:
 jobs:
   composite:
     runs-on: ubuntu-latest
-    name: Npm build test
+    name: Npm build test 2
     steps:
       - id: compuesta
         uses: juan-sanchez-ait/gha-npm-composite-action@v2

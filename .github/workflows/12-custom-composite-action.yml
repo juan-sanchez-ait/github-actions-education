@@ -8,8 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Npm build test 2
     steps:
-      - uses: actions/checkout@v4
       - id: compuesta
-        uses: juan-sanchez-ait/gha-npm-composite-action@v2
+        uses: juan-sanchez-ait/gha-npm-composite-action@v1
         with:
           node-version: 20

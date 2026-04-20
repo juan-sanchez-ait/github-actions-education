@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     container: node:16-bullseye
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: run node
         run: node script.js
   container-2-container:
@@ -25,7 +25,7 @@ jobs:
           --health-timeout 5s
           --health-retries 5
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Install dependencies
         run: npm i
       - name: connect to redis
@@ -47,7 +47,7 @@ jobs:
   #       ports: # We need to explicitly map the ports
   #         - 6379:6379
   #   steps:
-  #     - uses: actions/checkout@v3
+  #     - uses: actions/checkout@v4
   #     - name: Install dependencies
   #       run: npm i
   #     - name: connect to redis
